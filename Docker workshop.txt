@@ -6,7 +6,7 @@ Docker workshop, ca. 3 timer
 	Talk: Introduksjon til Docker
 		Drømmen: docker run "whatever-service"
 		Bruk presentasjonen på docker.io, frem til VM-sammenlikningen
-		Klient/server
+		Klient/server (Stian: Trenger vi å se det? Eller nevne det for OSX?)
 		Image/container
 			Image er et utganspunkt
 			Container er en kjørende instans
@@ -42,6 +42,7 @@ Docker workshop, ca. 3 timer
 		EXPOSE
 		ADD (insert)
 	Oppgaver: lag en dockerfile med en Java-app, start den og besøk den i nettleseren
+	Oppgave?: Mount lokal disk for å lagre loggfiler
 
 4. Flere containers
 	Talk: database og web server
