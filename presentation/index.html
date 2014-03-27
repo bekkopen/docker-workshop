@@ -5,7 +5,7 @@
 	<head>
 		<meta charset="utf-8">
 
-		<title>reveal.js - The HTML Presentation Framework</title>
+		<title>Docker Workshop</title>
 
 		<meta name="description" content="A framework for easily creating beautiful presentations using HTML">
 		<meta name="author" content="Hakim El Hattab">
@@ -88,7 +88,7 @@
 </section>
 
 <section>
-	<h2>Get a starting image</h2>
+	<h2>Get a base image</h2>
 	<p><code class="bash">docker pull --tag="latest" ubuntu</code></p>
 	<p>Pulls an image from <a href="http://index.docker.io">index.docker.io</a></p>
 </section>
@@ -135,7 +135,7 @@ CONTAINER ID        IMAGE               COMMAND             CREATED             
 	<h2>A useful container</h2>
 	<pre><code class="bash">docker run --interactive --tty ubuntu /bin/bash</code></pre>
 	<pre><code class="bash" data-trim>
-root@a9f2bd405f9e:/# echo "Hello World" &lt; /somefile.txt
+root@a9f2bd405f9e:/# echo "Hello World" &gt; /somefile.txt
 root@a9f2bd405f9e:/# exit
 	</code></pre>
 </section>
@@ -152,10 +152,10 @@ a9f2bd405f9e        ubuntu:latest       /bin/bash           3 minutes ago       
 
 <section>
 	<h2>Restart a container</h2>
-	<p>Will re-run the same command. Will use re-use same disk.</p>
+	<p>Will re-run the same command. Will re-use same disk.</p>
 	<pre><code class="bash">docker start --attach --interactive a9f2bd405f9e</code></pre>
 	<pre><code class="bash" data-trim>
-root@a9f2bd405f9e:/# echo "Hello World" &lt; /anotherfile.txt
+root@a9f2bd405f9e:/# echo "Hello World" &gt; /anotherfile.txt
 root@a9f2bd405f9e:/# exit
 	</code></pre>
 </section>
@@ -206,7 +206,56 @@ dbf0e2a6421dfcb3d2194c5e2c3daf2132bd0c172cdaaa3ab90f27d5a0273ba8
 	</ol>
 </section>
 
+<section>
+	<h2>Summary</h2>
+	<ol>
+		<li><code class="bash">docker run --interactive --tty ubuntu /bin/bash</code></li>
+		<li>(do stuff in container)</li>
+		<li><code class="bash">docker commit CONTAINER_ID</code></li>
+	</ol>
+</section>
 
+<section>
+	<h1>Dockerfile</h1>
+	<h3>The Recipe</h3>
+</section>
+
+<section>
+	<h2>Dockerfile</h2>
+	<pre><code class="bash" data-trim>
+FROM ubuntu
+RUN apt-get update
+RUN apt-get install -y openjdk-7-jdk
+	</code></pre>
+</section>
+
+
+
+<section>
+	<h2>Build image</h2>
+	<pre><code class="bash">docker build --tag="ubuntu-jdk-7" .</code></pre>
+	<hr>
+	<pre><code class="bash">
+$> docker images
+REPOSITORY     TAG      IMAGE ID      CREATED        VIRTUAL SIZE
+ubuntu-jdk-7   latest   34b580498f7b  2 minutes ago  248.2 MB
+	</code></pre>
+</section>
+
+
+<section>
+	<h2>Assignment #2</h2>
+	<p>Do the following using a Dockerfile ...</p>
+	<ol>
+		<li>Create an image with <code>zsh</code> installed</li>
+		<li>Create a container based on that image, and verify that <code>zsh</code> is installed</li>
+	</ol>
+</section>
+
+<section>
+	<h2>Dockerfiles pt. 2</h2>
+	<p>ENTRYPOINT & EXPOSE<p>
+</section>
 
 
 
