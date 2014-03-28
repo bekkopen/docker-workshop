@@ -44,8 +44,8 @@ Docker workshop, ca. 3 timer
 	Oppgaver: lag en dockerfile med en Java-app, start den og besøk den i nettleseren
 	Oppgave?: Mount lokal disk for å lagre loggfiler
 
-4. Flere containers
-	Talk: database og web server
+4. Multiple containers
+	Talk: web server
 		link
 	Oppgaver: utvid Java-appen med database
 
