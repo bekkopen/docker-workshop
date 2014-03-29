@@ -433,12 +433,19 @@ f6f38448a2ee   app:latest    /bin/sh -c java -jar  Up 2 minutes      0.0.0.0:888
 	<h2>Assignment #4</h2>
 	<ol>
 		<li>
-			Build an image with Redis running (remember to EXPOSE the port)
+			Build an image with Redis running 
+			<p style="font-size: 16pt">(remember to <code>EXPOSE</code> the port)</p>
 		</li>
 		<li>
-			Start the Java application with the --link option
+			Run a container based on the newly created Redis-image 
+			<p style="font-size: 16pt">(remember to give it a <code>--name</code>)</p>
 		</li>
-		<li>Verify that the application is connected to Redis by visiting <a href="http://localhost:8888/">http://localhost:8888</a>		
+		<li>
+			Start the Java application from <a href="#/ass3">assignment 3</a> with the <code>--link</code> option
+		</li>
+		<li>
+			Verify that the application is connected to Redis by visiting <a href="http://localhost:8888/">http://localhost:8888</a>		
+	    </li>
 	</ol>
 </section>
 
