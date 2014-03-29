@@ -99,8 +99,8 @@
 	<hr/>
 	<pre><code class="bash">docker images</code></pre>
 	<pre><code class="bash" data-trim>
-REPOSITORY          TAG                 IMAGE ID            CREATED             VIRTUAL SIZE
-ubuntu              latest              9cd978db300e        7 weeks ago         204.4 MB
+REPOSITORY TAG    IMAGE ID     CREATED     VIRTUAL SIZE
+ubuntu     latest 9cd978db300e 7 weeks ago 204.4 MB
 	</pre></code>
 	<hr/>
 	<pre><code class="bash">docker images --tree</code></pre>
@@ -127,8 +127,8 @@ $ docker images --tree
 	<h2>List containers</h2>
 	<pre><code class="bash">docker ps --all</code></pre>
 	<pre><code class="bash" data-trim>
-CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS ...
-2529384fabd4        ubuntu:latest       echo Hello World    8 minutes ago       Exit 0 ...
+CONTAINER ID IMAGE         COMMAND          CREATED       STATUS ...
+2529384fabd4 ubuntu:latest echo Hello World 8 minutes ago Exit 0 ...
 	</pre></code>
 </section>
 
@@ -145,9 +145,9 @@ root@a9f2bd405f9e:/# exit
 	<h2>Container has died</h2>
 	<pre><code class="bash">docker ps --all</code></pre>
 	<pre><code class="bash" data-trim>
-CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS ...
-a9f2bd405f9e        ubuntu:latest       /bin/bash           3 minutes ago       Exit 0 ...
-2529384fabd4        ubuntu:latest       echo Hello World    20 minutes ago      Exit 0 ...
+CONTAINER ID IMAGE         COMMAND          CREATED        STATUS ...
+a9f2bd405f9e ubuntu:latest /bin/bash        3 minutes ago  Exit 0 ...
+2529384fabd4 ubuntu:latest echo Hello World 20 minutes ago Exit 0 ...
 	</pre></code>
 </section>
 
@@ -198,12 +198,29 @@ dbf0e2a6421dfcb3d2194c5e2c3daf2132bd0c172cdaaa3ab90f27d5a0273ba8
 </section>
 
 <section>
+	<h2>Setup for assignment</h2>
+	<ul>
+		<li>We are using Vagrant for the assignments</li>
+		<li>Really just a virtual machine in VirtualBox</li>
+		<li><code>vagrant up</code> Starts your virtual machine</li>
+		<li><code>vagrant destroy</code> Resets your virtual machine</li>
+		<li><code>/vagrant</code> inside the virtual machine is a shared folder</li>
+	</ul>
+</section>
+
+<section id="ass1">
 	<h2>Assignment #1</h2>
 	<ol>
-		<li>Run <code>echo "Hello world"</code> in a container</li>
+		<li>Run <code>echo "Hello world"</code> in a container based on the Ubuntu image</li>
 		<li>Run an interactive bash in a container</li>
-		<li>Install java in a container (using interactive bash)</li>
-		<li>Create an image with java installed</li>
+		<li>Next task requires to use the run command with the option <code>--privileged=true</code></li>
+		<li>Install java (<code>openjdk-7-jdk</code>) in a container (using interactive bash)</li>
+		<ul>
+			<li><code>apt-get update</code> Updates list of available software</li>
+			<li><code>apt-get install</code> Install software</li>
+		</ul>
+		<li>Create an image called <code>ubuntu-jdk-7</code> with java installed</li>
+		<li>Try to run <code>java -version</code> using your new image</li>
 	</ol>
 </section>
 
@@ -228,6 +245,7 @@ FROM ubuntu
 RUN apt-get update
 RUN apt-get install -y openjdk-7-jdk
 	</code></pre>
+	<p>Each run creates a new layer. Layers are re-used</p>
 </section>
 
 
@@ -244,12 +262,14 @@ ubuntu-jdk-7   latest   34b580498f7b  2 minutes ago  248.2 MB
 </section>
 
 
-<section>
+<section id="ass2">
 	<h2>Assignment #2</h2>
 	<p>Do the following using a Dockerfile ...</p>
 	<ol>
-		<li>Create an image with <code>java</code> installed</li>
-		<li>Create a container based on that image, and verify that <code>java</code> is installed</li>
+		<li>Create an image with <code>cowsay</code> installed</li>
+		<li>Cowsay is installed in <code>/usr/games/cowsay</code></li>
+		<li>Tag your image</li>
+		<li>Create a container based on that image, and use <code>cowsay</code> to say something</li>
 	</ol>
 </section>
 
@@ -297,8 +317,8 @@ USER daemon
 	<p>Specify which ports the container should make available</p>
 	<pre><code class="bash" data-trim>
 FROM ubuntu-jdk-7
-ADD helloworld-1.0.jar /var/apps/javapp/helloworld-1.0.jar
-ENTRYPOINT ["java", "-jar", "/var/apps/javapp/helloworld-1.0.jar"]
+ADD javapp.jar /var/apps/javapp/javapp.jar
+ENTRYPOINT ["java", "-jar", "/var/apps/javapp/javapp.jar"]
 USER daemon
 
 EXPOSE 4567
@@ -308,18 +328,22 @@ EXPOSE 4567
 <section>
 	<h2>Publish ports</h2>
 	<p>Ports are not automatically published</p>
-	<pre><code class="bash">docker run -p 8080:4567 ubuntu-myapp</code></pre>
-	<p>Maps ports 8080 on host machine to 4567 on container</p>
+	<pre><code class="bash">docker run -p 8888:4567 ubuntu-myapp</code></pre>
+	<p>Maps ports 8888 on host machine to 4567 on container</p>
 </section>
 
-<section>
+<section id="ass3">
 	<h2>Assignment #3</h2>
 	<ol>
-		<li>Build an image which starts the supplied Java application</li>
+		<li>
+			Build an image which starts the supplied Java application
+			(based on the <code>ubuntu-jdk-7</code> image from
+			<a href="#/ass1">Assignment #1</a>)
+		</li>
 		<li>The application is started with <code>java -jar helloworld-1.0.jar</code></li>
 		<li>The application is running on port 4567</li>
-		<li>Start the container with the port mapped to port 8080 on the host machine</li>
-		<li>Check that the application is running on <a href="http://localhost:8080/">http://localhost:8080</a>
+		<li>Start the container with the port mapped to port 8888 on the host machine</li>
+		<li>Check that the application is running on <a href="http://localhost:8888/">http://localhost:8888</a>
 	</ol>
 </section>
 
