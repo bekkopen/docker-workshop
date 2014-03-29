@@ -16,6 +16,10 @@ public class HelloWorld {
         final Jedis jedis;
         try {
             if (args.length == 2) {
+
+                System.out.println("arg0: " + args[0]);
+                System.out.println("arg1: " + args[1]);
+                
                 jedis = new Jedis(args[0], Integer.valueOf(args[1]));
                 jedis.set("testing_the_connection", "");
 

@@ -348,6 +348,84 @@ EXPOSE 4567
 </section>
 
 
+<section>
+	<h2>Linking containers</h2>
+</section>
+
+
+<section>
+	<pre><code class="bash">
+FROM ubuntu:latest
+
+RUN apt-get update
+RUN apt-get -y install redis-server
+
+ENTRYPOINT ["redis-server"]
+
+EXPOSE 6379
+	</pre></code>
+
+	<code class="bash">docker run -d --name="redis" redis</code>
+	<p>Redis is exposing 6379 to other containers, but not to the host</p>
+
+	<pre><code>
+$ docker ps
+CONTAINER ID  IMAGE         COMMAND       CREATED         STATUS        PORTS     NAMES
+45779783e5a2  redis:latest  redis-server  2 seconds ago   Up 2 seconds  6379/tcp  redis
+	</code></pre>
+
+</section>
+
+<section>
+	<h4>Let's connect to Redis!</h4>
+	<pre><code>
+$ docker run -t -i --link="redis:redis" ubuntu bash
+
+root@541474c8ccd4:/# env
+
+REDIS_PORT_6379_TCP_PROTO=tcp
+HOSTNAME=541474c8ccd4
+TERM=xterm
+REDIS_NAME=/backstabbing_franklin/redis
+REDIS_PORT_6379_TCP_ADDR=172.17.0.2
+REDIS_PORT_6379_TCP_PORT=6379
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+PWD=/
+REDIS_PORT_6379_TCP=tcp://172.17.0.2:6379
+SHLVL=1
+REDIS_PORT=tcp://172.17.0.2:6379
+HOME=/
+_=/usr/bin/env
+	</code></pre>
+	<p>We can use $REDIS_PORT_6379_TCP_ADDR and $REDIS_PORT_6379_TCP_PORT</p>
+</section>
+
+<section>
+	<code><pre>
+FROM ubuntu:latest
+
+RUN apt-get update
+RUN apt-get -y install openjdk-7-jre-headless
+
+ADD helloworld-1.0.jar /var/apps/helloworld-1.0.jar
+
+ENTRYPOINT ["java", "-jar", "/var/apps/helloworld-1.0.jar", "$REDIS_PORT_6379_TCP_ADDR", "$REDIS_PORT_6379_TCP_PORT"]
+	</pre></code>
+	<code>docker build -t app .</code>
+	<code>docker run -d -p 8888:4567 --link="redis:redis" app</code>
+
+</section>
+	
+<section>
+	TODO: show output from 'docker ps' with the port mapping column
+</section>
+
+
+<section>
+	TODO: visit localhost:8888
+</section>
+
+
 				<section>
 					<h1>Reveal.js</h1>
 					<h3>HTML Presentations Made Easy</h3>

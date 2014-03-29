@@ -45,9 +45,17 @@ Docker workshop, ca. 3 timer
 	Oppgave?: Mount lokal disk for å lagre loggfiler
 
 4. Multiple containers
-	Talk: web server
-		link
-	Oppgaver: utvid Java-appen med database
+	Talk: 
+		We want multiple containers to communicate with each other
+		hard wire localhost:<port> in each app?
+		'link' to the rescue!
+
+		Docker is inspired by...
+			functional programming: immutable state (every change creates a new image)
+			virtual machines: self-explanatory
+			version control: diff, history, tags, pull, push etc.
+
+	Oppgaver: utvid Java-appen med Redis
 
 
 
