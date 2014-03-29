@@ -409,7 +409,7 @@ RUN apt-get -y install openjdk-7-jre-headless
 
 ADD helloworld-1.0.jar /var/apps/helloworld-1.0.jar
 
-ENTRYPOINT ["java", "-jar", "/var/apps/helloworld-1.0.jar", "$REDIS_PORT_6379_TCP_ADDR", "$REDIS_PORT_6379_TCP_PORT"]
+ENTRYPOINT java -jar /var/apps/helloworld-1.0.jar $REDIS_PORT_6379_TCP_ADDR $REDIS_PORT_6379_TCP_PORT
 	</pre></code>
 	<code>docker build -t app .</code>
 	<code>docker run -d -p 8888:4567 --link="redis:redis" app</code>

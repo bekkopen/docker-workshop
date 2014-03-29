@@ -4,7 +4,7 @@ import spark.Request;
 import spark.Response;
 import spark.Route;
 
-import java.io.*;
+import java.util.Set;
 
 import static spark.Spark.get;
 import static spark.Spark.post;
@@ -12,33 +12,11 @@ import static spark.Spark.post;
 public class HelloWorld {
 
     public static void main(String[] args) {
-
         final Jedis jedis;
         try {
             if (args.length == 2) {
-
-                System.out.println("arg0: " + args[0]);
-                System.out.println("arg1: " + args[1]);
-                
-                jedis = new Jedis(args[0], Integer.valueOf(args[1]));
-                jedis.set("testing_the_connection", "");
-
-                System.out.println("Hooray! Connected to Redis");
-
-                get(new Route("/") {
-                    @Override
-                    public Object handle(Request request, Response response) {
-                        return getIndex(jedis);
-                    }
-                });
-
-                post(new Route("/") {
-                    @Override
-                    public Object handle(Request request, Response response) {
-                        jedis.set("message", request.queryParams("message"));
-                        return getIndex(jedis);
-                    }
-                });
+                jedis = initRedis(args);
+                setupRoutes(jedis);
             }
             else {
                 System.out.println("No args given");
@@ -51,14 +29,50 @@ public class HelloWorld {
         }
     }
 
+    private static void setupRoutes(final Jedis jedis) {
+        get(new Route("/") {
+            @Override
+            public Object handle(Request request, Response response) {
+                return getIndex(jedis);
+            }
+        });
+
+        post(new Route("/") {
+            @Override
+            public Object handle(Request request, Response response) {
+                jedis.set(request.queryParams("key"), request.queryParams("value"));
+                return getIndex(jedis);
+            }
+        });
+    }
+
+    private static Jedis initRedis(String[] args) {
+        Jedis jedis;
+        System.out.println("arg0: " + args[0]);
+        System.out.println("arg1: " + args[1]);
+
+        jedis = new Jedis(args[0], Integer.valueOf(args[1]));
+        jedis.set("test", " ");
+        String reply = jedis.get("test");
+        jedis.del("test");
+        if (reply.equals(" ")) {
+            System.out.println("Hooray! Connected to Redis");
+        }
+        else {
+            System.out.println("Sort of connected to Redis, but somethings not quite right");
+        }
+
+        return jedis;
+    }
+
     private static String getIndex(Jedis jedis) {
-        try {
-            String html = readStream(HelloWorld.class.getResourceAsStream("/index.html"));
-            return html.replace("{{message}}", jedis.get("message"));
+        Set<String> keys = jedis.keys("*");
+        String messages = "";
+        for(String key : keys){
+            String value = jedis.get(key);
+            messages += "<li>"+ key +": "+ value +"</li>";
         }
-        catch (IOException e) {
-            return e.getStackTrace().toString();
-        }
+        return indexHtml.replace("{{messages}}", messages);
     }
 
     private static void setupHelloWorldPage() {
@@ -70,22 +84,14 @@ public class HelloWorld {
         });
     }
 
-
-    public static String readStream(InputStream s) throws IOException {
-        InputStreamReader reader = new InputStreamReader(s, "UTF-8");
-
-        BufferedReader bufferedReader = new BufferedReader(reader);
-        String string;
-        String output = "";
-        do {
-            string = bufferedReader.readLine();
-            if (string != null) {
-                output += string;
-            }
-        }
-        while (string != null);
-        s.close();
-
-        return output;
-    }
+    static String indexHtml =
+        "<html>" +
+        "<form action=\".\" method=\"post\">" +
+            "<input type=\"text\" placeholder=\"key\" name=\"key\" style=\"font-size: 25pt\" autofocus>" +
+            "<input type=\"text\" placeholder=\"value\" name=\"value\" style=\"font-size: 25pt\">" +
+            "<input type=\"submit\" style=\"visibility: hidden\"/>"+
+        "</form>" +
+        "<h1>Keys and values:</h1>" +
+        "<ul>{{messages}}</ul>" +
+        "</html>";
 }
