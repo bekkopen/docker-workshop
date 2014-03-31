@@ -61,17 +61,38 @@
 </section>
 
 <section>
-	<h2>The Dream!</h2>
+	<h1>The Dream!</h1>
 	<hr/>
 	<code>docker run myapp</code>
+	<aside class="notes">Stian</aside>
 </section>
 
 <section>
-	<h2>Insert some slide about Docker (from docker.io)<h2>
+	<h1>Virtualization is NOT the point</h1>
 </section>
 
 <section>
-	<h2>Image and container<h2>
+	<img src="images/1.png" style="border: 0">
+</section>
+
+<section>
+	<img src="images/2.png" style="border: 0">
+</section>
+
+<section>
+	<img src="images/3.png" style="border: 0">
+</section>
+
+<section>
+	<img src="images/4.png" style="border: 0">
+</section>
+
+<section>
+	<img src="images/5.png" style="border: 0">
+</section>
+
+<section>
+	<h2>Image and container</h2>
 	<hr></hr>
 	<h3>Image:</h3>
 	<p>
@@ -83,6 +104,7 @@
 		A program running in docker, which uses an image as a base image.
 		Each container start from scratch from the base image.
 	</p>
+	<aside class="notes">Tobias</aside>
 </section>
 
 <section>
@@ -232,6 +254,7 @@ dbf0e2a6421dfcb3d2194c5e2c3daf2132bd0c172cdaaa3ab90f27d5a0273ba8
 		<li>(do stuff in container)</li>
 		<li><code class="bash">docker commit CONTAINER_ID</code></li>
 	</ol>
+	<aside class="notes">Stian</aside>
 </section>
 
 <section>
@@ -246,10 +269,8 @@ FROM ubuntu
 RUN apt-get update
 RUN apt-get install -y openjdk-7-jdk
 	</code></pre>
-	<p>Each run creates a new layer. Layers are re-used</p>
+	<p>Each RUN-command creates a new layer. Layers are re-used</p>
 </section>
-
-
 
 <section>
 	<h2>Build image</h2>
@@ -261,7 +282,6 @@ REPOSITORY     TAG      IMAGE ID      CREATED        VIRTUAL SIZE
 ubuntu-jdk-7   latest   34b580498f7b  2 minutes ago  248.2 MB
 	</code></pre>
 </section>
-
 
 <section id="ass2">
 	<h2>Assignment #2</h2>
@@ -277,6 +297,7 @@ ubuntu-jdk-7   latest   34b580498f7b  2 minutes ago  248.2 MB
 <section>
 	<h2>Dockerfiles pt. 2</h2>
 	<p>ADD, ENTRYPOINT, USER AND EXPOSE<p>
+	<aside class="notes">Tobias</aside>
 </section>
 
 <section>
@@ -351,6 +372,7 @@ EXPOSE 4567
 
 <section>
 	<h2>Linking containers</h2>
+	<aside class="notes">Tobias</aside>
 </section>
 
 
@@ -421,7 +443,7 @@ ENTRYPOINT java -jar
 	
 <section>
     <h2>Our app is now connected to Redis</h2>
-	<pre><code class="bash" style="font-size: 13pt">
+	<pre><code class="bash" style="font-size: 11pt">
 $ docker ps
 CONTAINER ID   IMAGE         COMMAND               STATUS            PORTS                   NAMES
 f6f38448a2ee   app:latest    /bin/sh -c java -jar  Up 2 minutes      0.0.0.0:8888->4567/tcp  thirsty_hawking
@@ -434,8 +456,8 @@ f6f38448a2ee   app:latest    /bin/sh -c java -jar  Up 2 minutes      0.0.0.0:888
 	<h2>Assignment #4</h2>
 	<ol>
 		<li>
-			Build an image with Redis running 
-			<p style="font-size: 16pt">(remember to <code>EXPOSE</code> the port)</p>
+			Build an image with Redis running
+			<p style="font-size: 16pt">(Create the new Dockerfile in a seperate directory. Remember to <code>EXPOSE</code> the port)</p>
 		</li>
 		<li>
 			Run a container based on the newly created Redis-image 
@@ -450,6 +472,10 @@ f6f38448a2ee   app:latest    /bin/sh -c java -jar  Up 2 minutes      0.0.0.0:888
 	</ol>
 </section>
 
+<section>
+	<h1>Thank you!</h1>
+	<h3>Tobias Waaler and Stian Mathiassen</h3>
+</section>
 
 			</div>
 
