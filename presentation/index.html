@@ -227,6 +227,7 @@ dbf0e2a6421dfcb3d2194c5e2c3daf2132bd0c172cdaaa3ab90f27d5a0273ba8
 		<li>Really just a virtual machine in VirtualBox</li>
 		<li><code>vagrant up</code> Starts your virtual machine</li>
 		<li><code>vagrant destroy</code> Resets your virtual machine</li>
+		<li><code>vagrant ssh</code> Log in to the virtual machine</li>
 		<li><code>/vagrant</code> inside the virtual machine is a shared folder</li>
 	</ul>
 </section>
@@ -308,6 +309,7 @@ FROM ubuntu-jdk-7
 
 ADD javapp.jar /var/apps/javapp/javapp.jar
 	</code></pre>
+	<p>Same as running <code>docker insert</code></p>
 </section>
 
 <section>
@@ -319,7 +321,6 @@ ADD javapp.jar /var/apps/javapp/javapp.jar
 
 ENTRYPOINT ["java", "-jar", "/var/apps/javapp/javapp.jar"]
 	</code></pre>
-	<p>Same as running <code>docker insert</code></p>
 </section>
 
 <section>
@@ -405,20 +406,14 @@ CONTAINER ID  IMAGE         COMMAND       CREATED         STATUS        PORTS   
 $ docker run -t -i --link="redis:redis" ubuntu bash
 
 root@541474c8ccd4:/# env
-
+...
 REDIS_PORT_6379_TCP_PROTO=tcp
-HOSTNAME=541474c8ccd4
-TERM=xterm
 REDIS_NAME=/backstabbing_franklin/redis
 REDIS_PORT_6379_TCP_ADDR=172.17.0.2
 REDIS_PORT_6379_TCP_PORT=6379
-PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-PWD=/
 REDIS_PORT_6379_TCP=tcp://172.17.0.2:6379
-SHLVL=1
 REDIS_PORT=tcp://172.17.0.2:6379
-HOME=/
-_=/usr/bin/env
+...
 	</code></pre>
 </section>
 
@@ -464,7 +459,9 @@ f6f38448a2ee   app:latest    /bin/sh -c java -jar  Up 2 minutes      0.0.0.0:888
 			<p style="font-size: 16pt">(remember to give it a <code>--name</code>)</p>
 		</li>
 		<li>
-			Start the Java application from <a href="#/ass3">assignment 3</a> with the <code>--link</code> option
+			Build a new image for the Java application, with the new startup parameters</li>
+		<li>
+			Start the Java application with the <code>--link</code> option
 		</li>
 		<li>
 			Verify that the application is connected to Redis by visiting <a href="http://localhost:8888/">http://localhost:8888</a>		
