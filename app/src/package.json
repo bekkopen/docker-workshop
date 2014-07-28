@@ -5,6 +5,8 @@
   "description": "Simple Node.js application for use in a docker workshop",
   "author": "Tobias G. Waaler <tobiasgwaaler@gmail.com>",
   "dependencies": {
-    "express": "3.2.4"
+    "express": "3.2.4",
+    "mongodb": "1.4.7",
+    "mongoose": "3.8.14" 
   }
 }

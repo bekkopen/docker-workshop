@@ -7,5 +7,6 @@ VAGRANTFILE_API_VERSION = "2"
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.box = "yungsang/boot2docker"
   config.vm.network "forwarded_port", guest: 8888, host: 8888
+  config.vm.network "forwarded_port", guest: 27017, host: 27017
   config.vm.synced_folder "", "/vagrant"
 end
