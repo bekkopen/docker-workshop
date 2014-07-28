@@ -326,7 +326,7 @@ ENTRYPOINT ["node", "/var/apps/nodejs/index.js"]
 	<p>Run command as user</p>
 	<pre><code class="bash" data-trim>
 FROM ubuntu-nodejs
-ADD javapp.jar /var/apps/javapp/javapp.jar
+ADD ./src /var/apps/nodejs/
 ENTRYPOINT ["node", "/var/apps/nodejs/index.js"]
 
 USER daemon
@@ -338,7 +338,7 @@ USER daemon
 	<p>Specify which ports the container should make available</p>
 	<pre><code class="bash" data-trim>
 FROM ubuntu-nodejs
-ADD javapp.jar /var/apps/javapp/javapp.jar
+ADD ./src /var/apps/nodejs/
 ENTRYPOINT ["node", "/var/apps/nodejs/index.js"]
 USER daemon
 
