@@ -1,0 +1,10 @@
+{
+  "name": "docker-node",
+  "private": true,
+  "version": "0.0.1",
+  "description": "Simple Node.js application for use in a docker workshop",
+  "author": "Tobias G. Waaler <tobiasgwaaler@gmail.com>",
+  "dependencies": {
+    "express": "3.2.4"
+  }
+}
