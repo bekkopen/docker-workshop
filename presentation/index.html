@@ -243,7 +243,7 @@ dbf0e2a6421dfcb3d2194c5e2c3daf2132bd0c172cdaaa3ab90f27d5a0273ba8
 			<li><code>apt-get install</code> Install software</li>
 		</ul>
 		<li>Create an image called <code>ubuntu-nodejs</code> with node.js installed</li>
-		<li>Try to run <code>node --version</code> using your new image</li>
+		<li>Try to run <code>nodejs --version</code> using your new image</li>
 	</ol>
 </section>
 
@@ -268,6 +268,7 @@ dbf0e2a6421dfcb3d2194c5e2c3daf2132bd0c172cdaaa3ab90f27d5a0273ba8
 FROM ubuntu
 RUN apt-get update
 RUN apt-get install -y nodejs
+RUN apt-get install -y npm
 	</code></pre>
 	<p>Each RUN-command creates a new layer. Layers are re-used</p>
 </section>
@@ -287,9 +288,9 @@ ubuntu-nodejs  latest   34b580498f7b  2 minutes ago  248.2 MB
 	<h2>Assignment #2</h2>
 	<p>Do the following using a Dockerfile ...</p>
 	<ol>
-		<li>Create an image with <code>nodejs</code> installed</li>
+		<li>Create an image with <code>nodejs</code> and <code>npm</code> installed</li>
 		<li>Tag your image</li>
-		<li>Create a container based on that image, and run <code>node --version</code> to check that it is installed correctly</li>
+		<li>Create a container based on that image, and run <code>nodejs --version</code> to check that it is installed correctly</li>
 	</ol>
 </section>
 
@@ -317,7 +318,7 @@ ADD ./src /var/apps/nodejs/
 FROM ubuntu-nodejs
 ADD ./src /var/apps/nodejs/
 
-ENTRYPOINT ["node", "/var/apps/nodejs/index.js"]
+ENTRYPOINT ["nodejs", "/var/apps/nodejs/index.js"]
 	</code></pre>
 </section>
 
@@ -327,7 +328,7 @@ ENTRYPOINT ["node", "/var/apps/nodejs/index.js"]
 	<pre><code class="bash" data-trim>
 FROM ubuntu-nodejs
 ADD ./src /var/apps/nodejs/
-ENTRYPOINT ["node", "/var/apps/nodejs/index.js"]
+ENTRYPOINT ["nodejs", "/var/apps/nodejs/index.js"]
 
 USER daemon
 	</pre></code>
@@ -339,7 +340,7 @@ USER daemon
 	<pre><code class="bash" data-trim>
 FROM ubuntu-nodejs
 ADD ./src /var/apps/nodejs/
-ENTRYPOINT ["node", "/var/apps/nodejs/index.js"]
+ENTRYPOINT ["nodejs", "/var/apps/nodejs/index.js"]
 USER daemon
 
 EXPOSE 4567
@@ -349,20 +350,21 @@ EXPOSE 4567
 <section>
 	<h2>Publish ports</h2>
 	<p>Ports are not automatically published</p>
-	<pre><code class="bash">docker run -p 8888:4567 ubuntu-myapp</code></pre>
-	<p>Maps ports 8888 on host machine to 4567 on container</p>
+	<pre><code class="bash">docker run -p 8888:8888 ubuntu-myapp</code></pre>
+	<p>Maps ports 8888 on host machine to 8888 on container</p>
 </section>
 
 <section id="ass3">
 	<h2>Assignment #3</h2>
 	<ol>
 		<li>
-			Build an image which starts the supplied Java application
+			Build an image which starts the previously made image
 			(based on the <code>ubuntu-nodejs</code> image from
 			<a href="#/ass1">Assignment #1</a>)
 		</li>
-		<li>The application is started with <code>java -jar helloworld-1.0.jar</code></li>
-		<li>The application is running on port 4567</li>
+		<li>Run <code>npm install</code> in the application directory
+		<li>The application is started with <code>nodejs /var/apps/nodejs/index.js</code></li>
+		<li>The application is running on port 8888</li>
 		<li>Start the container with the port mapped to port 8888 on the host machine</li>
 		<li>Check that the application is running on <a href="http://localhost:8888/">http://localhost:8888</a>
 	</ol>
