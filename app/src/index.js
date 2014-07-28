@@ -15,19 +15,25 @@ var PORT = 8888;
 
 // App
 var app = express();
+app.use(express.bodyParser());
+
 app.get('/', function (req, res) {
-  var post = new Post({ content: 'asdasdasd' });
-  post.save();
-  var list = "<ol>";
+
   Post.find( function (err, posts) {
+    var list = "<ol>";
     for (var i = 0; i < posts.length; i++) {
-      list += "<li>" + posts[i] + "</li>";
+      list += "<li>" + posts[i].content + "</li>";
     }
+    list += "</ol>";
+    var output = list + '<form method="post" action="/"><input name="content" type="text"/><button type="submit"></form>';
+    res.send(output);
   });
-  list += "</ol>";
-  res.send(list + '<form method="post" action="/"><input name="content" type="text"/><button type="submit"></form>');
+
 });
-app.post('/', function (req,res) {
+
+app.post('/', function (req, res) {
+  var post = new Post({ content: req.body.content });
+  post.save();
   res.redirect('/');
 });
 
