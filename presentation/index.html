@@ -113,7 +113,7 @@
 
 <section>
 	<h2>Get a base image</h2>
-	<p><code class="bash">docker pull --tag="latest" ubuntu</code></p>
+	<p><code class="bash">docker pull ubuntu:latest</code></p>
 	<p>Pulls an image from <a href="http://index.docker.io">index.docker.io</a></p>
 </section>
 
@@ -237,14 +237,13 @@ dbf0e2a6421dfcb3d2194c5e2c3daf2132bd0c172cdaaa3ab90f27d5a0273ba8
 	<ol>
 		<li>Run <code>echo "Hello world"</code> in a container based on the Ubuntu image</li>
 		<li>Run an interactive bash in a container</li>
-		<li>Next task requires to use the run command with the option <code>--privileged=true</code></li>
-		<li>Install java (<code>openjdk-7-jdk</code>) in a container (using interactive bash)</li>
+		<li>Install node.js (<code>nodejs</code>) in a container (using interactive bash)</li>
 		<ul>
 			<li><code>apt-get update</code> Updates list of available software</li>
 			<li><code>apt-get install</code> Install software</li>
 		</ul>
-		<li>Create an image called <code>ubuntu-jdk-7</code> with java installed</li>
-		<li>Try to run <code>java -version</code> using your new image</li>
+		<li>Create an image called <code>ubuntu-nodejs</code> with node.js installed</li>
+		<li>Try to run <code>node --version</code> using your new image</li>
 	</ol>
 </section>
 
@@ -268,19 +267,19 @@ dbf0e2a6421dfcb3d2194c5e2c3daf2132bd0c172cdaaa3ab90f27d5a0273ba8
 	<pre><code class="bash" data-trim>
 FROM ubuntu
 RUN apt-get update
-RUN apt-get install -y openjdk-7-jdk
+RUN apt-get install -y nodejs
 	</code></pre>
 	<p>Each RUN-command creates a new layer. Layers are re-used</p>
 </section>
 
 <section>
 	<h2>Build image</h2>
-	<pre><code class="bash">docker build --tag="ubuntu-jdk-7" .</code></pre>
+	<pre><code class="bash">docker build --tag="ubuntu-nodejs" .</code></pre>
 	<hr>
 	<pre><code class="bash">
 $> docker images
 REPOSITORY     TAG      IMAGE ID      CREATED        VIRTUAL SIZE
-ubuntu-jdk-7   latest   34b580498f7b  2 minutes ago  248.2 MB
+ubuntu-nodejs  latest   34b580498f7b  2 minutes ago  248.2 MB
 	</code></pre>
 </section>
 
@@ -288,16 +287,15 @@ ubuntu-jdk-7   latest   34b580498f7b  2 minutes ago  248.2 MB
 	<h2>Assignment #2</h2>
 	<p>Do the following using a Dockerfile ...</p>
 	<ol>
-		<li>Create an image with <code>cowsay</code> installed</li>
-		<li>Cowsay is installed in <code>/usr/games/cowsay</code></li>
+		<li>Create an image with <code>nodejs</code> installed</li>
 		<li>Tag your image</li>
-		<li>Create a container based on that image, and use <code>cowsay</code> to say something</li>
+		<li>Create a container based on that image, and run <code>node --version</code> to check that it is installed correctly</li>
 	</ol>
 </section>
 
 <section>
 	<h2>Dockerfiles pt. 2</h2>
-	<p>ADD, ENTRYPOINT, USER AND EXPOSE<p>
+	<p>ADD, ENTRYPOINT, USER AND EXPOSE</p>
 	<aside class="notes">Tobias</aside>
 </section>
 
@@ -305,9 +303,9 @@ ubuntu-jdk-7   latest   34b580498f7b  2 minutes ago  248.2 MB
 	<h2>ADD</h2>
 	<p>Copy a file from the host to the image</p>
 	<pre><code class="bash" data-trim>
-FROM ubuntu-jdk-7
+FROM ubuntu-nodejs
 
-ADD javapp.jar /var/apps/javapp/javapp.jar
+ADD ./src /var/apps/nodejs/
 	</code></pre>
 	<p>Same as running <code>docker insert</code></p>
 </section>
@@ -316,10 +314,10 @@ ADD javapp.jar /var/apps/javapp/javapp.jar
 	<h2>ENTRYPOINT</h2>
 	<p>Command to run when starting the container</p>
 	<pre><code class="bash" data-trim>
-FROM ubuntu-jdk-7
-ADD javapp.jar /var/apps/javapp/javapp.jar
+FROM ubuntu-nodejs
+ADD ./src /var/apps/nodejs/
 
-ENTRYPOINT ["java", "-jar", "/var/apps/javapp/javapp.jar"]
+ENTRYPOINT ["node", "/var/apps/nodejs/index.js"]
 	</code></pre>
 </section>
 
@@ -327,9 +325,9 @@ ENTRYPOINT ["java", "-jar", "/var/apps/javapp/javapp.jar"]
 	<h2>USER</h2>
 	<p>Run command as user</p>
 	<pre><code class="bash" data-trim>
-FROM ubuntu-jdk-7
+FROM ubuntu-nodejs
 ADD javapp.jar /var/apps/javapp/javapp.jar
-ENTRYPOINT ["java", "-jar", "/var/apps/javapp/javapp.jar"]
+ENTRYPOINT ["node", "/var/apps/nodejs/index.js"]
 
 USER daemon
 	</pre></code>
@@ -339,9 +337,9 @@ USER daemon
 	<h2>EXPOSE</h2>
 	<p>Specify which ports the container should make available</p>
 	<pre><code class="bash" data-trim>
-FROM ubuntu-jdk-7
+FROM ubuntu-nodejs
 ADD javapp.jar /var/apps/javapp/javapp.jar
-ENTRYPOINT ["java", "-jar", "/var/apps/javapp/javapp.jar"]
+ENTRYPOINT ["node", "/var/apps/nodejs/index.js"]
 USER daemon
 
 EXPOSE 4567
@@ -360,7 +358,7 @@ EXPOSE 4567
 	<ol>
 		<li>
 			Build an image which starts the supplied Java application
-			(based on the <code>ubuntu-jdk-7</code> image from
+			(based on the <code>ubuntu-nodejs</code> image from
 			<a href="#/ass1">Assignment #1</a>)
 		</li>
 		<li>The application is started with <code>java -jar helloworld-1.0.jar</code></li>
