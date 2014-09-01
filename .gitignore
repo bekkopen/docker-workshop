@@ -5,3 +5,4 @@ Dockerfile*
 reveal.js-2.6.1/
 target/
 dependency-reduced-pom.xml
+node_modules
