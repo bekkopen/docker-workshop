@@ -5,7 +5,7 @@ RUN echo 'deb http://downloads-distro.mongodb.org/repo/ubuntu-upstart dist 10gen
 RUN apt-get update
 RUN apt-get --yes install mongodb-org
 
-RUN mkdir -p /data/db
+VOLUME /data/db
 EXPOSE 27017
 
 ENTRYPOINT mongod

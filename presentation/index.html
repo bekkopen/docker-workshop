@@ -54,7 +54,7 @@
 
 <section>
 	<h1>Docker</h1>
-	<img src="https://www.docker.io/static/img/homepage-docker-logo.png" style="border: 0"></img>
+	<img src="images/docker-whale.png" style="border: 0"></img>
 	<p>
 		<small>Tobias Waaler og Stian Mathiassen</small>
 	</p>
@@ -137,7 +137,7 @@ $ docker images --tree
 
 <section>
 	<h2>Image layers</h2>
-	<img src="http://docs.docker.io/en/latest/_images/docker-filesystems-multilayer.png" style="border: 0"></img>
+	<img src="images/docker-filesystems-multilayer.png" style="border: 0"></img>
 </section>
 
 <section>
@@ -267,8 +267,7 @@ dbf0e2a6421dfcb3d2194c5e2c3daf2132bd0c172cdaaa3ab90f27d5a0273ba8
 	<pre><code class="bash" data-trim>
 FROM ubuntu
 RUN apt-get update
-RUN apt-get install -y nodejs
-RUN apt-get install -y npm
+RUN apt-get install -y nodejs npm
 	</code></pre>
 	<p>Each RUN-command creates a new layer. Layers are re-used</p>
 </section>
@@ -343,14 +342,14 @@ ADD ./src /var/apps/nodejs/
 ENTRYPOINT ["nodejs", "/var/apps/nodejs/index.js"]
 USER daemon
 
-EXPOSE 4567
+EXPOSE 8888
 	</code></pre>
 </section>
 
 <section>
 	<h2>Publish ports</h2>
 	<p>Ports are not automatically published</p>
-	<pre><code class="bash">docker run -p 8888:8888 ubuntu-myapp</code></pre>
+	<pre><code class="bash">docker run -p 8888:8888 ubuntu-nodejs</code></pre>
 	<p>Maps ports 8888 on host machine to 8888 on container</p>
 </section>
 
@@ -370,12 +369,32 @@ EXPOSE 4567
 	</ol>
 </section>
 
+<section>
+	<h2>Volumes</h2>
+	<aside class="notes">Stian</aside>
+</section>
+
+<section>
+	<h2>VOLUME</h2>
+	<p>Add a data volume</p>
+	<pre><code class="bash" data-trim>
+FROM ubuntu:14.04
+...
+ENTRYPOINT mongod
+
+VOLUME /data/db
+</code></pre>
+</section>
+
+<section>
+	<h2>Mounting volumes</h2>
+	<pre><code class="bash">docker run -v /data:/data/db ubuntu-mongo</code></pre>
+</section>
 
 <section>
 	<h2>Linking containers</h2>
 	<aside class="notes">Tobias</aside>
 </section>
-
 
 <section>
 <h2>Container #1: Redis</h2>
