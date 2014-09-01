@@ -388,7 +388,7 @@ VOLUME /data/db
 
 <section>
 	<h2>Mounting volumes</h2>
-	<pre><code class="bash">docker run -v /data:/data/db ubuntu-mongo</code></pre>
+	<pre><code class="bash">docker run --volume /data:/data/db ubuntu-mongo</code></pre>
 </section>
 
 <section>
@@ -397,24 +397,27 @@ VOLUME /data/db
 </section>
 
 <section>
-<h2>Container #1: Redis</h2>
-	<pre><code class="bash">FROM ubuntu:latest
+<h2>Container #1: MongoDB</h2>
+	<pre><code class="bash">FROM ubuntu:14.04
 
+RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 7F0CEB10
+RUN echo 'deb http://downloads-distro.mongodb.org/repo/ubuntu-upstart dist 10gen' | sudo tee /etc/apt/sources.list.d/mongodb.list
 RUN apt-get update
-RUN apt-get -y install redis-server
+RUN apt-get --yes install mongodb-org
 
-ENTRYPOINT ["redis-server"]
+VOLUME /data/db
+EXPOSE 27017
 
-EXPOSE 6379</pre></code>
+ENTRYPOINT mongod
+</pre></code>
 
-	<pre><code class="bash">$ docker build -t redis /path/to/Dockerfile</code></pre>
-	<pre><code class="bash">$ docker run -d --name="redis" redis</code></pre>
-	<p>Redis is exposing 6379 to other containers, but not to the host</p>
+	<pre><code class="bash">$ docker build --tag ubuntu-mongo /path/to/mongodb/Dockerfile</code></pre>
+	<pre><code class="bash">$ docker run --volume /data:/data/db --name mongodb --detach ubuntu-mongo</code></pre>
+	<p>MongoDB is running!</p>
 
-	<pre><code style="font-size: 13pt">
-$ docker ps
-CONTAINER ID  IMAGE         COMMAND       CREATED         STATUS        PORTS     NAMES
-45779783e5a2  redis:latest  redis-server  2 seconds ago   Up 2 seconds  6379/tcp  redis
+	<pre><code style="font-size: 13pt">$ docker ps
+CONTAINER ID  IMAGE         COMMAND               PORTS      NAMES
+43a1d9173209  mongo:latest  /bin/sh -c mongod /b  27017/tcp  mongodb
 	</code></pre>
 
 </section>
@@ -422,46 +425,58 @@ CONTAINER ID  IMAGE         COMMAND       CREATED         STATUS        PORTS   
 <section>
 	<h4>Using --link to get environment properties</h4>
 	<pre><code class="bash" data-trim>
-$ docker run -t -i --link="redis:redis" ubuntu bash
+$ docker run -t -i --link="mongodb:mongodb" ubuntu bash
 
 root@541474c8ccd4:/# env
 ...
-REDIS_PORT_6379_TCP_PROTO=tcp
-REDIS_NAME=/backstabbing_franklin/redis
-REDIS_PORT_6379_TCP_ADDR=172.17.0.2
-REDIS_PORT_6379_TCP_PORT=6379
-REDIS_PORT_6379_TCP=tcp://172.17.0.2:6379
-REDIS_PORT=tcp://172.17.0.2:6379
+MONGODB_PORT_27017_TCP=tcp://172.17.0.30:27017
+MONGODB_PORT=tcp://172.17.0.30:27017
+MONGODB_PORT_27017_TCP_PORT=27017
+MONGODB_PORT_27017_TCP_PROTO=tcp
+MONGODB_PORT_27017_TCP_ADDR=172.17.0.30
 ...
 	</code></pre>
 </section>
 
 <section>
-	<h2>Container #2: our Java app</h2>
-	<pre><code class="bash">FROM ubuntu:latest
+	<h4>Using the environment variables</h4>
+	<p>In our node app:</p>
+	<pre><code class="javascript" data-trim>
+var mongoPort = process.env.MONGODB_PORT_27017_TCP_PORT;
+var ip = process.env.MONGODB_PORT_27017_TCP_ADDR;
+
+var connectionString = 'mongodb://' + ip + ':' + mongoPort + '/local';
+mongoose.connect(connectionString);
+    </code></pre>
+</section>
+
+<section>
+	<h2>Container #2: our NodeJS app</h2>
+	<pre><code class="bash">FROM ubuntu:14.04
 
 RUN apt-get update
-RUN apt-get -y install openjdk-7-jre-headless
+RUN apt-get --yes install nodejs npm
 
-ADD helloworld-1.0.jar /var/apps/helloworld-1.0.jar
+ADD ./src /var/apps/nodejs/
+RUN cd /var/apps/nodejs/; npm install
 
-ENTRYPOINT java -jar 
-           /var/apps/helloworld-1.0.jar
-           $REDIS_PORT_6379_TCP_ADDR
-           $REDIS_PORT_6379_TCP_PORT</code></pre>
+EXPOSE 8888
 
-	<pre><code class="bash">$ docker build -t app .</code></pre>
-	<pre><code class="bash">$ docker run -d -p 8888:4567 --link="redis:redis" app</code></pre>
+CMD nodejs /var/apps/nodejs/index.js
+	</code></pre>
+
+	<pre><code class="bash">$ docker build --tag ubuntu-nodejs .</code></pre>
+	<pre><code class="bash">$ docker run --publish 8888:8888 --link="mongodb:mongodb" --detach ubuntu-nodejs</code></pre>
 
 </section>
 	
 <section>
-    <h2>Our app is now connected to Redis</h2>
+    <h2>Our Nodejs app is now connected to MongoDB</h2>
 	<pre><code class="bash" style="font-size: 11pt">
 $ docker ps
-CONTAINER ID   IMAGE         COMMAND               STATUS            PORTS                   NAMES
-f6f38448a2ee   app:latest    /bin/sh -c java -jar  Up 2 minutes      0.0.0.0:8888->4567/tcp  thirsty_hawking
-1009b64253f9   redis:latest  redis-server          Up About an hour  6379/tcp                redis
+IMAGE                 COMMAND               PORTS                    NAMES
+ubuntu-nodejs:latest  /bin/sh -c 'nodejs /  0.0.0.0:8888->8888/tcp   lonely_goldstine
+mongo:latest          /bin/sh -c mongod /b  27017/tcp                drunk_ptolemy/mongodb,lonely_goldstine/mongodb,mongodb
 	</code></pre>
 </section>
 
@@ -470,22 +485,28 @@ f6f38448a2ee   app:latest    /bin/sh -c java -jar  Up 2 minutes      0.0.0.0:888
 	<h2>Assignment #4</h2>
 	<ol>
 		<li>
-			Build an image with Redis running
+			Build an image with MongoDB running
 			<p style="font-size: 16pt">(Create the new Dockerfile in a seperate directory. Remember to <code>EXPOSE</code> the port)</p>
 		</li>
 		<li>
-			Run a container based on the newly created Redis-image 
+			Run a container based on the newly created Mongod-image 
 			<p style="font-size: 16pt">(remember to give it a <code>--name</code>)</p>
 		</li>
 		<li>
-			Build a new image for the Java application, with the new startup parameters</li>
+			Build a new image for the Nodejs application</li>
 		<li>
-			Start the Java application with the <code>--link</code> option
+			Start the Nodejs application with the <code>--link</code> option
 		</li>
 		<li>
-			Verify that the application is connected to Redis by visiting <a href="http://localhost:8888/">http://localhost:8888</a>		
+			Verify that the application is connected to MongoDB by visiting <a href="http://localhost:8888/">http://localhost:8888</a>		
 	    </li>
 	</ol>
+</section>
+
+<section id="bonusAss">
+	<h2>Bonus assignment</h2>
+	<p>Build images that you find useful!</p>
+	<p><a>https://registry.hub.docker.com/</a></p>
 </section>
 
 <section>
