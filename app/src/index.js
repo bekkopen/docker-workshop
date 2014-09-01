@@ -10,7 +10,7 @@ app.use(express.bodyParser());
 
 if(mongoPort === undefined || ip === undefined){
   app.get('/', function (req, res) {
-    res.send("Running without mongodb");
+    res.send("Yes! We are UP AND RUNNING!! Node! Inside Docker! Inside Vagrant! Inside John Malkovich!");
   });
 }
 
