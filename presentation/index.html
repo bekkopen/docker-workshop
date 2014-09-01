@@ -412,7 +412,9 @@ ENTRYPOINT mongod
 </pre></code>
 
 	<pre><code class="bash">$ docker build --tag ubuntu-mongo /path/to/mongodb/Dockerfile</code></pre>
-	<pre><code class="bash">$ docker run --volume /data:/data/db --name mongodb --detach ubuntu-mongo</code></pre>
+	<pre><code class="bash">$ docker run --volume /data:/data/db 
+             --name mongodb 
+             --detach ubuntu-mongo</code></pre>
 	<p>MongoDB is running!</p>
 
 	<pre><code style="font-size: 13pt">$ docker ps
@@ -465,8 +467,10 @@ EXPOSE 8888
 CMD nodejs /var/apps/nodejs/index.js
 	</code></pre>
 
-	<pre><code class="bash">$ docker build --tag ubuntu-nodejs .</code></pre>
-	<pre><code class="bash">$ docker run --publish 8888:8888 --link="mongodb:mongodb" --detach ubuntu-nodejs</code></pre>
+	<pre><code class="bash">$ docker build --tag ubuntu-nodejs /path/to/nodejs/Dockerfile</code></pre>
+	<pre><code class="bash">$ docker run --publish 8888:8888 
+             --link="mongodb:mongodb" 
+             --detach ubuntu-nodejs</code></pre>
 
 </section>
 	
