@@ -10,17 +10,20 @@ To get started:
 #### 2. Install vagrant
 Install vagrant from https://www.vagrantup.com/ and fetch our Docker-ready 
 vagrant image by running 
+<pre>
 <code>
 cd docker-workshop
 vagrant up
 </code>
+</pre>
 
 #### 3. Pull docker base image
 Inside the vagrant box, pull the ubuntu base image for Docker:
+<pre>
 <code>
 vagrant ssh
 cd /vagrant
 docker run ubuntu echo "hello world"
 </code>
-
+</pre>
 
