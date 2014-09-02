@@ -355,17 +355,14 @@ EXPOSE 8888
 
 <section id="ass3">
 	<h2>Assignment #3</h2>
+	<p>Based on the <code>ubuntu-nodejs</code> image created in <a href="#/ass2">Assignment #2</a>:
 	<ol>
-		<li>
-			Build an image which starts the previously made image
-			(based on the <code>ubuntu-nodejs</code> image from
-			<a href="#/ass1">Assignment #1</a>)
-		</li>
-		<li>Run <code>npm install</code> in the application directory
+		<li>Add <code>/vagrant/app/src</code> to <code>/var/apps/nodejs</code> inside the image</li>
+		<li>Run <code>npm install</code> in <code>/var/apps/nodejs</code></li>
 		<li>The application is started with <code>nodejs /var/apps/nodejs/index.js</code></li>
 		<li>The application is running on port 8888</li>
 		<li>Start the container with the port mapped to port 8888 on the host machine</li>
-		<li>Check that the application is running on <a href="http://localhost:8888/">http://localhost:8888</a>
+		<li>Check that the application is running on <a href="http://localhost:8888/">http://localhost:8888</a></li>
 	</ol>
 </section>
 
@@ -496,8 +493,6 @@ mongo:latest          /bin/sh -c mongod /b  27017/tcp                drunk_ptole
 			Run a container based on the newly created Mongod-image 
 			<p style="font-size: 16pt">(remember to give it a <code>--name</code>)</p>
 		</li>
-		<li>
-			Build a new image for the Nodejs application</li>
 		<li>
 			Start the Nodejs application with the <code>--link</code> option
 		</li>
