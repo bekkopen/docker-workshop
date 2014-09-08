@@ -25,3 +25,6 @@ vagrant ssh
 cd /vagrant
 docker run ubuntu echo "hello world"
 ```
+
+#### Troubleshooting
+If you are having trouble installing VirtualBox, Vagrant or the Vagrant Image, you can follow the official installation instructions on https://docs.docker.com/ 
