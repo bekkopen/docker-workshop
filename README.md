@@ -31,5 +31,8 @@ docker run ubuntu echo "hello world"
 ##### Installing Vagrant or VirtualBox
 If you are having trouble installing VirtualBox, Vagrant or the Vagrant Image, you can follow the official installation instructions on https://docs.docker.com/ 
 
+##### Problems running vagrant up on Windows
+Make sure virtualization is turned on in you BIOS
+
 ##### Port collision
 If you already have mongodb running on your local machine, there will be a port collision when trying to run `vagrant up`. See this note from Torgeir on how to solve this: https://github.com/bekkopen/docker-workshop/issues/1#event-162609858
