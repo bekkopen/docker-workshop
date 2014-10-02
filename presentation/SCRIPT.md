@@ -44,12 +44,11 @@ Base the new image on a container. Will create a new layer on top of the base im
 ### Dockerfile
 Each RUN-command creates a new layer. Layers are re-used
 
-    FROM ubuntu
+    FROM ubuntu:latest
     RUN apt-get update
     RUN apt-get install -y nodejs npm
 
-    docker build --tag="ubuntu-nodejs"
-    docker build
+    docker build --tag="ubuntu-nodejs" .
 
 ###### Using it
 
@@ -59,14 +58,17 @@ Each RUN-command creates a new layer. Layers are re-used
 ##### Copy files
 Copy a file from the host to the image
 
+    # In ./app/
     FROM ubuntu-nodejs
     ADD ./src /var/apps/nodejs/
+    RUN cd /var/apps/nodejs/; npm install
 
 ##### Startup
 Command to run when starting the container
 
     FROM ubuntu-nodejs
     ADD ./src /var/apps/nodejs/
+    RUN cd /var/apps/nodejs/; npm install
     ENTRYPOINT ["nodejs", "/var/apps/nodejs/index.js"]
 
 ##### User
@@ -93,7 +95,7 @@ Specify which ports the container should make available
 ##### Publish ports
 Ports are not automatically published
 
-    docker run -p 8888:8888 ubuntu-nodejs
+    docker run -p 8888:8888 node-app
 
 ##### Volumes
 
@@ -103,7 +105,11 @@ Ports are not automatically published
 
     docker build -t ubuntu-mongo .
 
-    docker run --volume /tmp/data:/data/db ubuntu-mongo
+    docker run --volume /tmp/data:/data/db
+               --name mongodb
+               --detach
+               ubuntu-mongo
+    docker logs mongodb
 
 
 ##### Link
@@ -118,6 +124,18 @@ Show two slides
 
     docker run --publish 8888:8888
                --link="mongodb:mongodb"
-               --detach ubuntu-nodejs
+               --detach node-app
     docker ps
 
+##### Easier with tools
+
+    db:
+      image: ubuntu-mongo
+      volumes:
+      - /var/data:/data/db
+    web:
+      image: node-app
+      links:
+        - db:mongodb
+      ports:
+        - 8888:8888
