@@ -4,6 +4,11 @@ var mongoPort = process.env.MONGODB_PORT_27017_TCP_PORT;
 var ip = process.env.MONGODB_PORT_27017_TCP_ADDR;
 var PORT = 8888;
 
+if(mongoPort === undefined || ip === undefined){
+  var mongoPort = process.env.MONGODB_1_PORT_27017_TCP_PORT;
+  var ip = process.env.MONGODB_1_PORT_27017_TCP_ADDR;
+}
+
 // App
 var app = express();
 app.use(express.bodyParser());
