@@ -26,6 +26,9 @@ cd /vagrant
 docker run ubuntu echo "hello world"
 ```
 
+#### 5. Check out the presentation 
+http://bekkopen.github.io/docker-workshop
+
 #### Troubleshooting
 
 ##### Installing Vagrant or VirtualBox
