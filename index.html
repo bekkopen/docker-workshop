@@ -295,7 +295,7 @@ ubuntu-nodejs  latest   34b580498f7b  2 minutes ago  248.2 MB
 
 <section>
 	<h2>Dockerfiles pt. 2</h2>
-	<p>ADD, ENTRYPOINT, USER AND EXPOSE</p>
+	<p>ADD, ENTRYPOINT, USER, WORKDIR and EXPOSE</p>
 	<aside class="notes">Tobias</aside>
 </section>
 
@@ -330,6 +330,17 @@ ADD ./src /var/apps/nodejs/
 ENTRYPOINT ["nodejs", "/var/apps/nodejs/index.js"]
 
 USER daemon
+	</pre></code>
+</section>
+
+<section>
+	<h2>WORKDIR</h2>
+	<p>Change current working directory</p>
+	<pre><code class="bash" data-trim>
+FROM ubuntu-nodejs
+WORKDIR /
+RUN rm -fr *
+
 	</pre></code>
 </section>
 
