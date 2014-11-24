@@ -125,14 +125,6 @@
 REPOSITORY TAG    IMAGE ID     CREATED     VIRTUAL SIZE
 ubuntu     latest 9cd978db300e 7 weeks ago 204.4 MB
 	</pre></code>
-	<hr/>
-	<pre><code class="bash">docker images --tree</code></pre>
-	<pre><code class="" data-trim>
-$ docker images --tree
-└─511136ea3c5a Virtual Size: 0 B
-  └─6170bb7b0ad1 Virtual Size: 0 B
-    └─9cd978db300e Virtual Size: 204.4 MB Tags: ubuntu:latest
-	</code></pre>
 </section>
 
 <section>
@@ -311,27 +303,28 @@ ADD ./src /var/apps/nodejs/
 </section>
 
 <section>
-	<h2>ENTRYPOINT</h2>
-	<p>Command to run when starting the container</p>
-	<pre><code class="bash" data-trim>
-FROM ubuntu-nodejs
-ADD ./src /var/apps/nodejs/
-
-ENTRYPOINT ["nodejs", "/var/apps/nodejs/index.js"]
-	</code></pre>
-</section>
-
-<section>
 	<h2>USER</h2>
 	<p>Run command as user</p>
 	<pre><code class="bash" data-trim>
 FROM ubuntu-nodejs
 ADD ./src /var/apps/nodejs/
-ENTRYPOINT ["nodejs", "/var/apps/nodejs/index.js"]
 
 USER daemon
-	</pre></code>
+	</code></pre>
 </section>
+
+<section>
+	<h2>ENTRYPOINT</h2>
+	<p>Command to run when starting the container</p>
+	<pre><code class="bash" data-trim>
+FROM ubuntu-nodejs
+ADD ./src /var/apps/nodejs/
+USER daemon
+
+ENTRYPOINT ["nodejs", "/var/apps/nodejs/index.js"]
+	</code></pre>
+</section>
+
 
 <section>
 	<h2>WORKDIR</h2>
@@ -341,7 +334,7 @@ FROM ubuntu-nodejs
 WORKDIR /
 RUN rm -fr *
 
-	</pre></code>
+	</code></pre>
 </section>
 
 <section>
@@ -350,8 +343,8 @@ RUN rm -fr *
 	<pre><code class="bash" data-trim>
 FROM ubuntu-nodejs
 ADD ./src /var/apps/nodejs/
-ENTRYPOINT ["nodejs", "/var/apps/nodejs/index.js"]
 USER daemon
+ENTRYPOINT ["nodejs", "/var/apps/nodejs/index.js"]
 
 EXPOSE 8888
 	</code></pre>
