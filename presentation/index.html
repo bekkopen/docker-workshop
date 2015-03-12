@@ -125,14 +125,6 @@
 REPOSITORY TAG    IMAGE ID     CREATED     VIRTUAL SIZE
 ubuntu     latest 9cd978db300e 7 weeks ago 204.4 MB
 	</pre></code>
-	<hr/>
-	<pre><code class="bash">docker images --tree</code></pre>
-	<pre><code class="" data-trim>
-$ docker images --tree
-└─511136ea3c5a Virtual Size: 0 B
-  └─6170bb7b0ad1 Virtual Size: 0 B
-    └─9cd978db300e Virtual Size: 204.4 MB Tags: ubuntu:latest
-	</code></pre>
 </section>
 
 <section>
@@ -242,7 +234,7 @@ dbf0e2a6421dfcb3d2194c5e2c3daf2132bd0c172cdaaa3ab90f27d5a0273ba8
 			<li><code>apt-get update</code> Updates list of available software</li>
 			<li><code>apt-get install</code> Install software</li>
 		</ul>
-		<li>Create an image called <code>ubuntu-nodejs</code> with node.js installed</li>
+		<li>Create an image called <code>assig1</code> with node.js installed</li>
 		<li>Try to run <code>nodejs --version</code> using your new image</li>
 	</ol>
 </section>
@@ -288,14 +280,14 @@ ubuntu-nodejs  latest   34b580498f7b  2 minutes ago  248.2 MB
 	<p>Do the following using a Dockerfile ...</p>
 	<ol>
 		<li>Create an image with <code>nodejs</code> and <code>npm</code> installed</li>
-		<li>Tag your image</li>
+		<li>Tag your image as <code>ubuntu-nodejs</code></li>
 		<li>Create a container based on that image, and run <code>nodejs --version</code> to check that it is installed correctly</li>
 	</ol>
 </section>
 
 <section>
 	<h2>Dockerfiles pt. 2</h2>
-	<p>ADD, ENTRYPOINT, USER AND EXPOSE</p>
+	<p>ADD, ENTRYPOINT, USER, WORKDIR and EXPOSE</p>
 	<aside class="notes">Tobias</aside>
 </section>
 
@@ -311,26 +303,38 @@ ADD ./src /var/apps/nodejs/
 </section>
 
 <section>
-	<h2>ENTRYPOINT</h2>
-	<p>Command to run when starting the container</p>
-	<pre><code class="bash" data-trim>
-FROM ubuntu-nodejs
-ADD ./src /var/apps/nodejs/
-
-ENTRYPOINT ["nodejs", "/var/apps/nodejs/index.js"]
-	</code></pre>
-</section>
-
-<section>
 	<h2>USER</h2>
 	<p>Run command as user</p>
 	<pre><code class="bash" data-trim>
 FROM ubuntu-nodejs
 ADD ./src /var/apps/nodejs/
-ENTRYPOINT ["nodejs", "/var/apps/nodejs/index.js"]
 
 USER daemon
-	</pre></code>
+	</code></pre>
+</section>
+
+<section>
+	<h2>ENTRYPOINT</h2>
+	<p>Command to run when starting the container</p>
+	<pre><code class="bash" data-trim>
+FROM ubuntu-nodejs
+ADD ./src /var/apps/nodejs/
+USER daemon
+
+ENTRYPOINT ["nodejs", "/var/apps/nodejs/index.js"]
+	</code></pre>
+</section>
+
+
+<section>
+	<h2>WORKDIR</h2>
+	<p>Change current working directory</p>
+	<pre><code class="bash" data-trim>
+FROM ubuntu-nodejs
+WORKDIR /
+RUN rm -fr *
+
+	</code></pre>
 </section>
 
 <section>
@@ -339,8 +343,8 @@ USER daemon
 	<pre><code class="bash" data-trim>
 FROM ubuntu-nodejs
 ADD ./src /var/apps/nodejs/
-ENTRYPOINT ["nodejs", "/var/apps/nodejs/index.js"]
 USER daemon
+ENTRYPOINT ["nodejs", "/var/apps/nodejs/index.js"]
 
 EXPOSE 8888
 	</code></pre>
@@ -358,7 +362,7 @@ EXPOSE 8888
 	<p>Based on the <code>ubuntu-nodejs</code> image created in <a href="#/ass2">Assignment #2</a>:
 	<ol>
 		<li>Add <code>/vagrant/app/src</code> to <code>/var/apps/nodejs</code> inside the image</li>
-		<li>Run <code>npm install</code> in <code>/var/apps/nodejs</code></li>
+		<li>Run <code>npm install</code> in <code>/var/apps/nodejs</code> directory in the container</li>
 		<li>The application is started with <code>nodejs /var/apps/nodejs/index.js</code></li>
 		<li>The application is running on port 8888</li>
 		<li>Start the container with the port mapped to port 8888 on the host machine</li>
@@ -506,6 +510,17 @@ mongo:latest          /bin/sh -c mongod /b  27017/tcp                drunk_ptole
 	<h2>Bonus assignment</h2>
 	<p>Build images that you find useful!</p>
 	<p><a>https://registry.hub.docker.com/</a></p>
+</section>
+
+<section>
+	<h2>Building on Docker</h2>
+	<ul>
+		<li><a href="http://www.fig.sh/">Fig</a> - Container management</li>
+		<li><a href="https://github.com/GoogleCloudPlatform/kubernetes">Kubernetes</a> - PaaS by Google</li>
+		<li><a href="https://github.com/progrium/dokku">Dokku</a> - Mini-PaaS in 100 lines of bash</li>
+		<li><a href="http://deis.io/">Deis</a> - PaaS</li>
+		<li><a href="https://flynn.io/">Flynn</a> - PaaS</li>
+	</ul>
 </section>
 
 <section>
