@@ -23,7 +23,7 @@ Inside the vagrant box, pull the ubuntu base image for Docker:
 ```
 vagrant ssh
 cd /vagrant
-docker run ubuntu echo "hello world"
+docker run ubuntu:latest echo "hello world"
 ```
 
 #### 5. Check out the presentation 
