@@ -234,7 +234,7 @@ dbf0e2a6421dfcb3d2194c5e2c3daf2132bd0c172cdaaa3ab90f27d5a0273ba8
 			<li><code>apt-get update</code> Updates list of available software</li>
 			<li><code>apt-get install</code> Install software</li>
 		</ul>
-		<li>Create an image called <code>ubuntu-nodejs</code> with node.js installed</li>
+		<li>Create an image called <code>assig1</code> with node.js installed</li>
 		<li>Try to run <code>nodejs --version</code> using your new image</li>
 	</ol>
 </section>
@@ -280,7 +280,7 @@ ubuntu-nodejs  latest   34b580498f7b  2 minutes ago  248.2 MB
 	<p>Do the following using a Dockerfile ...</p>
 	<ol>
 		<li>Create an image with <code>nodejs</code> and <code>npm</code> installed</li>
-		<li>Tag your image</li>
+		<li>Tag your image as <code>ubuntu-nodejs</code></li>
 		<li>Create a container based on that image, and run <code>nodejs --version</code> to check that it is installed correctly</li>
 	</ol>
 </section>
@@ -362,7 +362,7 @@ EXPOSE 8888
 	<p>Based on the <code>ubuntu-nodejs</code> image created in <a href="#/ass2">Assignment #2</a>:
 	<ol>
 		<li>Add <code>/vagrant/app/src</code> to <code>/var/apps/nodejs</code> inside the image</li>
-		<li>Run <code>npm install</code> in <code>/var/apps/nodejs</code></li>
+		<li>Run <code>npm install</code> in <code>/var/apps/nodejs</code> directory in the container</li>
 		<li>The application is started with <code>nodejs /var/apps/nodejs/index.js</code></li>
 		<li>The application is running on port 8888</li>
 		<li>Start the container with the port mapped to port 8888 on the host machine</li>
