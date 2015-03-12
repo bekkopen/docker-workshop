@@ -4,5 +4,7 @@ Dockerfile*
 .vagrant
 reveal.js-2.6.1/
 target/
+usb-drive/
+backup/
 dependency-reduced-pom.xml
 node_modules
